@@ -32,11 +32,6 @@ class SplashActivity : AppCompatActivity() {
             checkForPermission()
         }, 2000)
 
-
-     /*   imageView=findViewById(R.id.appCompatImageView);
-        anim= AnimationUtils.loadAnimation(this,R.anim.anim);
-
-        imageView.setAnimation(anim);*/
     }
 
     private fun checkForPermission() {
