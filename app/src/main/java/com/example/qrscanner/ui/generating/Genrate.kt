@@ -2,16 +2,15 @@ package com.example.qrscanner.ui.generating
 
 
 import android.Manifest
-import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.os.Build
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.MediaStore.Images
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,11 +22,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.qrscanner.R
-import com.example.qrscanner.ui.SplashActivity
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 
@@ -107,6 +106,9 @@ class Genrate : Fragment() {
                             )
                         }
                     }
+                    btn_share.setOnClickListener {
+                        shareImage()
+                    }
 
                 }catch (e: WriterException){
                     e.printStackTrace()
@@ -155,6 +157,17 @@ class Genrate : Fragment() {
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+    fun shareImage(){
+        val share = Intent(Intent.ACTION_SEND)
+        share.type = "image/jpeg"
+        val bytes = ByteArrayOutputStream()
+        bmb.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path: String = Images.Media.insertImage(context?.contentResolver, bmb, "Title", null)
+        val imageUri = Uri.parse(path)
+        share.putExtra(Intent.EXTRA_STREAM, imageUri)
+        startActivity(Intent.createChooser(share, "Select"))
+
     }
 
 
