@@ -136,7 +136,7 @@ class Genrate : Fragment() {
             )
             Toast.makeText(
                 context?.applicationContext,
-                "File is Saved in  $filename",
+                "Image is Saved Succesfuly",
                 Toast.LENGTH_LONG
             ).show()
         } catch (e: Exception) {
