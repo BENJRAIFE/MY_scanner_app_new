@@ -27,14 +27,14 @@ class MainActivity : AppCompatActivity() {
                 R.id.qrScanMenuId -> {
                     viewPager.currentItem = 0
                 }
-                R.id.scannedResultMenuId -> {
+                R.id.generateQrCodeMenuId  -> {
                     viewPager.currentItem = 1
 
                 }
-                R.id.favouriteScannedMenuId -> {
+                R.id.scannedResultMenuId -> {
                     viewPager.currentItem = 2
                 }
-                R.id.generateQrCodeMenuId -> {
+                R.id.favouriteScannedMenuId  -> {
                     viewPager.currentItem = 3
                 }
             }
@@ -51,13 +51,13 @@ class MainActivity : AppCompatActivity() {
                         bottomNavigationView.selectedItemId = R.id.qrScanMenuId
                     }
                     1 -> {
-                        bottomNavigationView.selectedItemId = R.id.scannedResultMenuId
+                        bottomNavigationView.selectedItemId=R.id.generateQrCodeMenuId
                     }
                     2 -> {
-                        bottomNavigationView.selectedItemId = R.id.favouriteScannedMenuId
+                        bottomNavigationView.selectedItemId = R.id.scannedResultMenuId
                     }
                     3 ->{
-                        bottomNavigationView.selectedItemId=R.id.generateQrCodeMenuId
+                        bottomNavigationView.selectedItemId = R.id.favouriteScannedMenuId
                     }
                 }
             }
