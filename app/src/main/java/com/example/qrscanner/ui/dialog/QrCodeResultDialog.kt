@@ -127,37 +127,38 @@ class QrCodeResultDialog(var context: Context) {
         userInfo4.text = ""
 
         // Run in another thread until completion to avoid thread blocking
-        CoroutineScope(Dispatchers.IO).launch{
-            val json = URL(url).readText()
-            withContext(Dispatchers.Main) {
-                val obj = JSONObject(json)
-
-                try {
-
-                    if (obj.getString("status") == "success"){
-
-                        userInfo1.text = "Name: \n" + obj.getJSONObject("data").getString("name")
-                        userInfo2.text = "Email: \n" + obj.getJSONObject("data").getString("email")
-                        userInfo3.text = "Field: \n" + obj.getJSONObject("data").getString("field")
-                        userInfo4.text = "Website: \n" + obj.getJSONObject("data").getString("website")
-                    }
-                    else if (obj.getString("status") == "fail"){
-
-                        userInfo1.text = ""
-                        userInfo2.text = obj.getString("message")
-                        userInfo3.text = ""
-                        userInfo4.text = ""
-                    } else {
-
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val json = URL(url).readText()
+                withContext(Dispatchers.Main) {
+                    try {
+                        val obj = JSONObject(json)
+                        val status = obj.getString("status")
+                        if (status == "success") {
+                            userInfo1.text = "Name: \n" + obj.getJSONObject("data").getString("name")
+                            userInfo2.text = "Email: \n" + obj.getJSONObject("data").getString("email")
+                            userInfo3.text = "Field: \n" + obj.getJSONObject("data").getString("field")
+                            userInfo4.text = "Website: \n" + obj.getJSONObject("data").getString("website")
+                        } else if (status == "fail") {
+                            userInfo1.text = ""
+                            userInfo2.text = obj.getString("message")
+                            userInfo3.text = ""
+                            userInfo4.text = ""
+                        } else {
+                            userInfo2.text = "Unknown status"
+                        }
+                    } catch (e: Exception) {
+                        Log.e("QrCodeResultDialog", "JSON Parsing error: ${e.message}")
                     }
                 }
-                catch (e: NumberFormatException) {
-
-                    Log.e("Tag", e.toString())
+            } catch (e: Exception) {
+                Log.e("QrCodeResultDialog", "Network error: ${e.message}")
+                withContext(Dispatchers.Main) {
+                    // Fail silently or show a message if the API is down
+                    userInfo2.text = "No additional data found"
                 }
             }
         }
-
     }
 
     fun setOnDismissListener(dismissListener: OnDismissListener) {
